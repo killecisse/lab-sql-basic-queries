@@ -1,47 +1,43 @@
+-- Display all available tables
+SHOW TABLES;
 
--- Create database if not exists
-CREATE DATABASE IF NOT EXISTS lab_mysql;
+-- Retrieve all data from the tables actor, film, and customer
+SELECT * FROM actor;
+SELECT * FROM film;
+SELECT * FROM customer;
 
--- Use the created database
-USE lab_mysql;
+-- Retrieve specific columns from their respective tables
+-- Titles of all films from the film table
+SELECT title FROM film;
 
--- Create Cars table
-CREATE TABLE Cars (
-    VIN VARCHAR(17) PRIMARY KEY,
-    Manufacturer VARCHAR(255),
-    Model VARCHAR(255),
-    Year INT,
-    Color VARCHAR(50)
-);
+-- List of languages used in films, with the column aliased as language from the language table
+SELECT name AS language FROM language;
 
--- Create Customers table
-CREATE TABLE Customers (
-    Customer_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(255),
-    Phone_Number VARCHAR(20),
-    Email VARCHAR(255),
-    Address VARCHAR(255),
-    City VARCHAR(100),
-    State_Province VARCHAR(100),
-    Country VARCHAR(100),
-    Zip_Postal_Code VARCHAR(20)
-);
+-- List of first names of all employees from the staff table
+SELECT first_name FROM staff;
 
--- Create Salespersons table
-CREATE TABLE Salespersons (
-    Salesperson_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(255),
-    Store VARCHAR(255)
-);
+-- Retrieve unique release years
+SELECT DISTINCT release_year FROM film;
 
--- Create Invoices table
-CREATE TABLE Invoices (
-    Invoice_Number INT AUTO_INCREMENT PRIMARY KEY,
-    Date DATE,
-    Car_VIN VARCHAR(17),
-    Customer_ID INT,
-    Salesperson_ID INT,
-    FOREIGN KEY (Car_VIN) REFERENCES Cars(VIN),
-    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
-    FOREIGN KEY (Salesperson_ID) REFERENCES Salespersons(Salesperson_ID)
-);
+-- Counting records for database insights
+-- Determine the number of stores that the company has
+SELECT COUNT(*) AS num_stores FROM store;
+
+-- Determine the number of employees that the company has
+SELECT COUNT(*) AS num_employees FROM staff;
+
+-- Determine how many films are available for rent and how many have been rented
+SELECT 
+    SUM(CASE WHEN inventory_id IN (SELECT inventory_id FROM rental) THEN 1 ELSE 0 END) AS rented_films,
+    COUNT(*) AS total_films
+FROM inventory;
+
+-- Determine the number of distinct last names of the actors in the database
+SELECT COUNT(DISTINCT last_name) AS num_distinct_last_names FROM actor;
+
+-- Retrieve the 10 longest films
+SELECT title, length FROM film ORDER BY length DESC LIMIT 10;
+
+-- Use filtering techniques
+-- Retrieve all actors with the first name "SCARLETT"
+SELECT * FROM actor WHERE first_name = 'SCARLETT';
